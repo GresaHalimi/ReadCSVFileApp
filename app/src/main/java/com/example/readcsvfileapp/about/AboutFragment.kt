@@ -8,7 +8,9 @@ import kotlinx.android.synthetic.main.about_view.*
 
 class AboutFragment : BaseFragment() {
 
-    private val filePath: String = "file:///android_asset/about.html"
+    companion object{
+        private const val filePath: String = "file:///android_asset/about.html"
+    }
 
     override val layout: Int
         get() = R.layout.about_view
