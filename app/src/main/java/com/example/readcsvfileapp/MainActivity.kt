@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ProgressBar
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,9 +13,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.readcsvfile.ui.adapter.GenericRecyclerViewAdapter
 import com.example.readcsvfileapp.about.AboutFragment
 import com.example.readcsvfileapp.about.BaseFragment
+import com.example.readcsvfileapp.engine.UsersEngineImpl
+import com.example.readcsvfileapp.ui.UserItemView
+import com.example.readcsvfileapp.ui.UsersView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedListener{
+class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStackChangedListener{
 
     companion object {
         private val FRAGMENT_TAG = "FRAGMENT_TAG"
@@ -33,8 +38,9 @@ class MainActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedList
         initializeViews()
 
         supportFragmentManager.addOnBackStackChangedListener(this)
-
+        mUsersPresenter = UsersPresenter(UsersEngineImpl(applicationContext))
         initializeAdapter()
+        mUsersPresenter?.attachedView(this)
     }
 
     private fun initializeViews() {
@@ -52,6 +58,7 @@ class MainActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedList
         val mLayoutManager = LinearLayoutManager(this)
         vRecyclerView.setLayoutManager(mLayoutManager)
         mAdapter = GenericRecyclerViewAdapter()
+        mUsersPresenter?.let { mAdapter?.setDataSource(it) }
         vRecyclerView.setAdapter(mAdapter)
     }
 
@@ -98,4 +105,21 @@ class MainActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedList
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
     }
+
+    override fun reloadContentView() {
+        vProgressbar.setVisibility(View.GONE)
+        vSwipeRefreshLayout.setEnabled(true)
+        vRecyclerView.setVisibility(View.VISIBLE)
+        mAdapter?.updateAccordingToDelegateAndNotifyDataSetChanged()
+    }
+
+    override fun getUserItemView(): UserItemView {
+        return UserItemView(applicationContext)
+    }
+
+    public override fun onDestroy() {
+        mUsersPresenter?.detachView()
+        super.onDestroy()
+    }
+
 }
