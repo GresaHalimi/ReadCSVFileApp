@@ -46,6 +46,7 @@ class ReadDataAsyncTask(private val mListener: OnLoadListener) :
                 )
                 users.add(user)
                 nextRecord = csvReader.readNext()
+                if (isCancelled) break
             }
             return users
         } catch (e: IOException) {
