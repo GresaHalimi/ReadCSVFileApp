@@ -1,4 +1,4 @@
-package com.example.readcsvfileapp
+package com.example.readcsvfileapp.about
 
 import android.os.Bundle
 import android.view.LayoutInflater

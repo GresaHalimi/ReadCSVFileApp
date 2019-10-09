@@ -3,7 +3,6 @@ package com.example.readcsvfileapp.about
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import com.example.readcsvfileapp.BaseFragment
 import com.example.readcsvfileapp.R
 import kotlinx.android.synthetic.main.about_view.*
 

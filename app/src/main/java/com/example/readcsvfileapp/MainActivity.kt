@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.readcsvfileapp.about.AboutFragment
+import com.example.readcsvfileapp.about.BaseFragment
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedListener{
