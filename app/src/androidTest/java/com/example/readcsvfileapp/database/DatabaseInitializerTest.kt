@@ -1,8 +1,9 @@
 package com.example.readcsvfileapp.database
 
+import android.content.Context
 import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.example.readcsvfileapp.engine.User
 import junit.framework.Assert.assertEquals
 import org.junit.Before
@@ -17,7 +18,8 @@ open class DatabaseInitializerTest {
 
     @Before
     fun initDb() {
-        usersDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getTargetContext(), AppDatabase::class.java).build()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        usersDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
     }
 
     @Test

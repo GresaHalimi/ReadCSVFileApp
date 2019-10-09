@@ -1,11 +1,39 @@
 <html>
 <body>
-<h2>How to use app!</h2>
-
-<h3> Home screen </h3>
+<h3> Intro </h3>
 <ul>
-    <li>Shows a list of users </li>
+    <li>The app is developed using MVP architecture.</li>
+    <li>UI is implemented using one activity and multiple fragments.</li>
+    <li>Room persistence library is used to save data in a local database.</li>
+    <li>In order to read CSV data we have used AsyncTask to perform background operations.</li>
+    <li>The app is developed based on TDD with a proper test coverage.</li>
 </ul>
 
+<h2>Features: </h2>
+<h3>Home screen</h3>
+<ul>
+    <li>Shows a list of users.</li>
+    <li>If there are no cached data we will read User data from CSV file otherwise we will show
+        cashed data.
+    </li>
+    <li>When we pull down on a list of users (Swipe-to-refresh
+        gesture) we read CSV file using Async task without blocking UI thread.
+    </li>
+</ul>
+
+<h3>Orientation</h3>
+<ul>
+    <li>The application handles phone rotation (Portrait and Landscape).</li>
+</ul>
+<h3>Tests</h3>
+<ul>
+    <li>In order to test User list we have implemented a Unit test</li>
+    <li>In order to test database implementation we have write a JUnit test (Instrumented unit
+        test)
+    </li>
+</ul>
+<h3>About Screen</h3>
+<ul>
+    <li>About screen is implemented using web view</li>
+</ul>
 </body>
-</html>
