@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,7 @@ import com.example.readcsvfileapp.engine.UsersEngineImpl
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStackChangedListener{
+class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStackChangedListener {
 
     companion object {
         private val FRAGMENT_TAG = "FRAGMENT_TAG"
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
     private lateinit var vRecyclerView: RecyclerView
     private lateinit var vProgressbar: ProgressBar
     private lateinit var vSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var vErrorTextView: TextView
 
     private var mAdapter: GenericRecyclerViewAdapter? = null
     private var mUsersPresenter: UsersPresenter? = null
@@ -46,8 +48,9 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
     private fun initializeViews() {
         vRecyclerView = recyclerview
         vProgressbar = progressbar
+        vErrorTextView = error_text
         vSwipeRefreshLayout = swiperefreshlayout
-        vSwipeRefreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener{
+        vSwipeRefreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 mUsersPresenter?.onRefresh()
             }
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
 
     private fun initializeAdapter() {
         val mLayoutManager = LinearLayoutManager(this)
-        vRecyclerView.setLayoutManager(mLayoutManager)
+        vRecyclerView.layoutManager = mLayoutManager
         mAdapter = GenericRecyclerViewAdapter()
         mUsersPresenter?.let { mAdapter?.setDataSource(it) }
         vRecyclerView.setAdapter(mAdapter)
@@ -69,7 +72,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun setFragment(fragment: BaseFragment) {
+    fun openFragment(fragment: BaseFragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
@@ -81,7 +84,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
         val id = item.itemId
 
         if (id == R.id.action_about) {
-            setFragment(AboutFragment())
+            openFragment(AboutFragment())
             return true
         }
 
@@ -107,9 +110,9 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
     }
 
     override fun reloadContentView() {
-        vProgressbar.setVisibility(View.GONE)
-        vSwipeRefreshLayout.setEnabled(true)
-        vRecyclerView.setVisibility(View.VISIBLE)
+        vProgressbar.visibility = View.GONE
+        vSwipeRefreshLayout.isEnabled = true
+        vRecyclerView.visibility = View.VISIBLE
         mAdapter?.updateAccordingToDelegateAndNotifyDataSetChanged()
     }
 
@@ -118,31 +121,32 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
     }
 
     override fun showProgressBar() {
-        vSwipeRefreshLayout.setEnabled(false)
-        vProgressbar.setVisibility(View.VISIBLE)
+        vSwipeRefreshLayout.isEnabled = false
+        vProgressbar.visibility = View.VISIBLE
     }
 
     override fun dismissProgressBar() {
-        vProgressbar.setVisibility(View.GONE)
+        vProgressbar.visibility = View.GONE
     }
 
     override fun dismissSwipeRefresh() {
-        vSwipeRefreshLayout.setRefreshing(false)
+        vSwipeRefreshLayout.isRefreshing = false
     }
 
     override fun showSwipeRefresh() {
-        vSwipeRefreshLayout.setRefreshing(true)
+        vSwipeRefreshLayout.isRefreshing = true
     }
 
-
     override fun showSnackbar(message: String) {
-        Snackbar.make(main_container, message,
-            Snackbar.LENGTH_SHORT)
-            .show()
+        Snackbar.make(main_container, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun showErrorView(message: String) {
-        //`TODO: implement
+        vRecyclerView.visibility = View.GONE
+        vProgressbar.visibility = View.GONE
+        vSwipeRefreshLayout.visibility = View.VISIBLE
+        vErrorTextView.visibility = View.VISIBLE
+        vErrorTextView.text = message
     }
 
     public override fun onDestroy() {
