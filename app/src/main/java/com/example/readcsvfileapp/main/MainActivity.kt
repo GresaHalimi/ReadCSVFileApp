@@ -1,4 +1,4 @@
-package com.example.readcsvfileapp
+package com.example.readcsvfileapp.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.readcsvfile.ui.adapter.GenericRecyclerViewAdapter
+import com.example.readcsvfileapp.R
 import com.example.readcsvfileapp.about.AboutFragment
 import com.example.readcsvfileapp.about.BaseFragment
 import com.example.readcsvfileapp.engine.UsersEngineImpl
-import com.example.readcsvfileapp.ui.UserItemView
-import com.example.readcsvfileapp.ui.UsersView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -38,7 +37,8 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
         initializeViews()
 
         supportFragmentManager.addOnBackStackChangedListener(this)
-        mUsersPresenter = UsersPresenter(UsersEngineImpl(applicationContext))
+        mUsersPresenter =
+            UsersPresenter(UsersEngineImpl(applicationContext))
         initializeAdapter()
         mUsersPresenter?.attachedView(this)
     }

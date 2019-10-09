@@ -1,4 +1,4 @@
-package com.example.readcsvfileapp.ui
+package com.example.readcsvfileapp.main
 
 import java.util.*
 

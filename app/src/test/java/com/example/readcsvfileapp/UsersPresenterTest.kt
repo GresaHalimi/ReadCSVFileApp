@@ -4,8 +4,9 @@ package com.example.readcsvfileapp
 import android.view.ViewGroup
 import com.example.readcsvfileapp.engine.User
 import com.example.readcsvfileapp.engine.UsersEngineImpl
-import com.example.readcsvfileapp.ui.UserItemView
-import com.example.readcsvfileapp.ui.UsersView
+import com.example.readcsvfileapp.main.UsersPresenter
+import com.example.readcsvfileapp.main.UserItemView
+import com.example.readcsvfileapp.main.UsersView
 import junit.framework.Assert.*
 import org.junit.Before
 import org.junit.Test

@@ -1,14 +1,13 @@
-package com.example.readcsvfileapp
+package com.example.readcsvfileapp.main
 
 import android.view.View
 import android.view.ViewGroup
 import com.example.readcsvfile.ui.adapter.StackViewDataSource
 import com.example.readcsvfile.ui.adapter.StackViewDelegate
+import com.example.readcsvfileapp.Presenter
 import com.example.readcsvfileapp.engine.User
 import com.example.readcsvfileapp.engine.UsersEngine
 import com.example.readcsvfileapp.engine.UsersEngineImpl
-import com.example.readcsvfileapp.ui.ItemView
-import com.example.readcsvfileapp.ui.UsersView
 
 
 open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersView>,
