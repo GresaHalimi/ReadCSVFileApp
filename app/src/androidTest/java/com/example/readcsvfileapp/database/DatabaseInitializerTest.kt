@@ -1,5 +1,6 @@
 package com.example.readcsvfileapp.database
 
+import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.readcsvfileapp.engine.User
@@ -16,8 +17,7 @@ open class DatabaseInitializerTest {
 
     @Before
     fun initDb() {
-        AppDatabase.TEST_MODE = true
-        usersDatabase = AppDatabase.getInstance(InstrumentationRegistry.getInstrumentation().getTargetContext())!!
+        usersDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getTargetContext(), AppDatabase::class.java).build()
     }
 
     @Test

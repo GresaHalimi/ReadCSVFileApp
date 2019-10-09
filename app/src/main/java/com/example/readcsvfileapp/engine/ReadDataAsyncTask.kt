@@ -50,6 +50,9 @@ class ReadDataAsyncTask(private val mListener: OnLoadListener) :
             }
             return users
         } catch (e: IOException) {
+            if (isCancelled) {
+                return null
+            }
             error = e.message.toString()
         } finally {
             try {
