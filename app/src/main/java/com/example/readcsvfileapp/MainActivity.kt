@@ -6,8 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.readcsvfile.ui.adapter.GenericRecyclerViewAdapter
 import com.example.readcsvfileapp.about.AboutFragment
 import com.example.readcsvfileapp.about.BaseFragment
 import kotlinx.android.synthetic.main.content_main.*
@@ -22,18 +24,35 @@ class MainActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedList
     private lateinit var vProgressbar: ProgressBar
     private lateinit var vSwipeRefreshLayout: SwipeRefreshLayout
 
+    private var mAdapter: GenericRecyclerViewAdapter? = null
+    private var mUsersPresenter: UsersPresenter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initializeViews()
 
         supportFragmentManager.addOnBackStackChangedListener(this)
+
+        initializeAdapter()
     }
 
     private fun initializeViews() {
         vRecyclerView = recyclerview
         vProgressbar = progressbar
         vSwipeRefreshLayout = swiperefreshlayout
+        vSwipeRefreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener{
+            override fun onRefresh() {
+                mUsersPresenter?.onRefresh()
+            }
+        })
+    }
+
+    private fun initializeAdapter() {
+        val mLayoutManager = LinearLayoutManager(this)
+        vRecyclerView.setLayoutManager(mLayoutManager)
+        mAdapter = GenericRecyclerViewAdapter()
+        vRecyclerView.setAdapter(mAdapter)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
