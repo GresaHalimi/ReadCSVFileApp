@@ -1,5 +1,4 @@
-package com.example.readcsvfile.adapter
-
+package com.example.readcsvfile.ui.adapter
 
 import android.util.SparseIntArray
 import android.view.View
