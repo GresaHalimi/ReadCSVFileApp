@@ -16,23 +16,53 @@ open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersVie
     UsersEngine.FetchUsersCallback {
 
     private var mView: UsersView? = null
-
     var users: List<User> = arrayListOf()
 
     override fun attachedView(view: UsersView) {
         mView = view
         usersEngine.register(this)
         users = usersEngine.getUsers()
+        if (users.isEmpty()) {
+            showLoading()
+            requestData()
+        }
+        updateView()
+    }
+
+    override fun detachView() {
+        usersEngine.onCancelAsyncTask()
+        usersEngine.unRegister(this)
+        mView = null
+    }
+
+    override fun onRefresh() {
+        showLoading()
         requestData()
     }
 
-    fun updateView() {
+    private fun updateView() {
         mView?.reloadContentView()
     }
 
     fun requestData() {
         usersEngine.fetchUsers()
     }
+
+    fun showLoading() {
+        if (users.size > 0) {
+            mView?.showSwipeRefresh()
+        } else {
+            mView?.showProgressBar()
+        }
+    }
+
+    fun dismissLoading() {
+        mView?.dismissSwipeRefresh()
+        if (users.size <= 0) {
+            mView?.dismissProgressBar()
+        }
+    }
+
 
     override fun getNumberOfItems(): Int {
         return users.size
@@ -58,23 +88,21 @@ open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersVie
         }
     }
 
-    override fun onRefresh() {
-        requestData()
-    }
-
-    override fun detachView() {
-        usersEngine.onCancelAsyncTask()
-        usersEngine.unRegister(this)
-        mView = null
-    }
-
     override fun onFetchUsersSuccess(users: List<User>) {
         this.users = users
+        dismissLoading()
         mView?.reloadContentView()
     }
 
     override fun onFetchUsersFailure(error: Throwable?) {
-
+        dismissLoading()
+        usersEngine.let {
+            if (it.getUsers().isNotEmpty()) {
+                mView?.showSnackbar(error?.localizedMessage.toString())
+            } else {
+                mView?.showErrorView(error?.localizedMessage.toString())
+            }
+        }
     }
 
 }

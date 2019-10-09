@@ -117,6 +117,34 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
         return UserItemView(applicationContext)
     }
 
+    override fun showProgressBar() {
+        vSwipeRefreshLayout.setEnabled(false)
+        vProgressbar.setVisibility(View.VISIBLE)
+    }
+
+    override fun dismissProgressBar() {
+        vProgressbar.setVisibility(View.GONE)
+    }
+
+    override fun dismissSwipeRefresh() {
+        vSwipeRefreshLayout.setRefreshing(false)
+    }
+
+    override fun showSwipeRefresh() {
+        vSwipeRefreshLayout.setRefreshing(true)
+    }
+
+
+    override fun showSnackbar(message: String) {
+        Snackbar.make(main_container, message,
+            Snackbar.LENGTH_SHORT)
+            .show()
+    }
+
+    override fun showErrorView(message: String) {
+        //`TODO: implement
+    }
+
     public override fun onDestroy() {
         mUsersPresenter?.detachView()
         super.onDestroy()
