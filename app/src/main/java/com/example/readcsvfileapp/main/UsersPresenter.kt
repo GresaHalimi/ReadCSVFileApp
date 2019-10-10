@@ -96,9 +96,9 @@ open class UsersPresenter(val usersEngine: UsersRepositoryImpl) : Presenter<User
 
     override fun onFetchCachedUsersSuccess(users: List<User>) {
         this.users = users
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             requestData()
-        }else {
+        } else {
             dismissLoading()
             mView?.reloadContentView()
         }

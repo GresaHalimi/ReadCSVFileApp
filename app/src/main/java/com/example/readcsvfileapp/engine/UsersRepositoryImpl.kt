@@ -22,9 +22,10 @@ open class UsersRepositoryImpl(val applicationContext: Context) : UsersRepositor
     private val job = Job()
     private val workerScope = CoroutineScope(Dispatchers.Main + job)
 
-    companion object{
+    companion object {
         private const val DATE_FORMAT = "yyyy-MM-dd"
     }
+
     init {
         getCachedData()
     }
@@ -83,8 +84,8 @@ open class UsersRepositoryImpl(val applicationContext: Context) : UsersRepositor
                 notifyFetchUsersFailure(error)
             } else {
                 notifyFetchUsersSuccess(mUsers)
-                updateCashedUserList()
             }
+            updateCashedUserList()
         } catch (exception: Exception) {
             notifyFetchUsersFailure(exception)
         }
@@ -99,30 +100,44 @@ open class UsersRepositoryImpl(val applicationContext: Context) : UsersRepositor
             val users = arrayListOf<User>()
 
             var nextRecord = csvReader.readNext()
+            if (nextRecord == null) {
+                error = FileStructureError("File is empty!")
+            }
             while (nextRecord != null) {
                 if (nextRecord.size == 4) {
                     val firstName = nextRecord[0]
                     val surname = nextRecord[1]
-                    val issueCount = nextRecord[2].toInt()
+                    var issueCount = 0
+                    nextRecord[2].let {
+                        try {
+                            issueCount = it.toInt()
+                        } catch (ex: java.lang.Exception) {
+
+                        }
+                    }
+                    val birthDate = nextRecord[3]
+
                     var date: Date? = null
                     try {
                         date =
-                            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(nextRecord[3])
+                            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(birthDate)
                     } catch (e: ParseException) {
-                        e.printStackTrace()
+                        error = FileStructureError("Wrong format")
                     }
                     val dateOfBirth = date
 
-                    val user = User(
-                        firstname = firstName,
-                        surname = surname,
-                        issueCount = issueCount,
-                        dateOfBirth = dateOfBirth,
-                        id = 0
-                    )
-                    users.add(user)
+                    if (!(firstName.isNullOrEmpty() && surname.isNullOrEmpty() && issueCount == 0 && birthDate.isNullOrEmpty())) {
+                        val user = User(
+                            firstname = firstName,
+                            surname = surname,
+                            issueCount = issueCount,
+                            dateOfBirth = dateOfBirth,
+                            id = 0
+                        )
+                        users.add(user)
+                    }
                 } else {
-                    error = FileStructureError()
+                    error = FileStructureError("Wrong format. Please check the file!")
                 }
                 nextRecord = csvReader.readNext()
             }
@@ -143,7 +158,11 @@ open class UsersRepositoryImpl(val applicationContext: Context) : UsersRepositor
     //region Publishers
 
     private fun notifyFetchUsersSuccess(users: List<User>) {
-        observers.forEach { o -> (o as? UsersRepository.FetchUsersCallback)?.onFetchUsersSuccess(users) }
+        observers.forEach { o ->
+            (o as? UsersRepository.FetchUsersCallback)?.onFetchUsersSuccess(
+                users
+            )
+        }
     }
 
     private fun notifyFetchCashedUsersSuccess(users: List<User>) {
@@ -163,7 +182,11 @@ open class UsersRepositoryImpl(val applicationContext: Context) : UsersRepositor
     }
 
     private fun notifyFetchUsersFailure(error: Throwable?) {
-        observers.forEach { o -> (o as? UsersRepository.FetchUsersCallback)?.onFetchUsersFailure(error) }
+        observers.forEach { o ->
+            (o as? UsersRepository.FetchUsersCallback)?.onFetchUsersFailure(
+                error
+            )
+        }
     }
 
     override fun register(callback: UsersRepository.UsersEngineCallback) {
@@ -181,6 +204,6 @@ open class UsersRepositoryImpl(val applicationContext: Context) : UsersRepositor
     //endregion
 }
 
-class FileStructureError : Throwable("Check the structure of file") {
+class FileStructureError(error: String) : Throwable(error) {
 
 }

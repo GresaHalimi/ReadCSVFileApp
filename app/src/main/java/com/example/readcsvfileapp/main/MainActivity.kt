@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
 
     override fun showErrorView(message: String) {
         vProgressbar.visibility = View.GONE
-        vRecyclerView.visibility = View.VISIBLE
+        vRecyclerView.visibility = View.GONE
         vSwipeRefreshLayout.visibility = View.VISIBLE
         vSwipeRefreshLayout.isEnabled = true
         vErrorTextView.visibility = View.VISIBLE

@@ -21,12 +21,21 @@ open class UserItemView : RelativeLayout, ItemView {
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(
+        context,
+        attrs,
+        defStyleAttr,
+        defStyleRes
+    ) {
         init()
     }
 
@@ -35,15 +44,15 @@ open class UserItemView : RelativeLayout, ItemView {
     }
 
 
-    override fun setName(n: String) {
+    override fun setName(n: String?) {
         name.text = n
     }
 
-    override fun setSurname(sname: String){
+    override fun setSurname(sname: String?) {
         surname.text = sname
     }
 
-    override fun setIssueCount(issue: Int){
+    override fun setIssueCount(issue: Int?) {
         issue_count.text = issue.toString()
     }
 
@@ -51,6 +60,8 @@ open class UserItemView : RelativeLayout, ItemView {
         date?.let {
             val formattedDate = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(it)
             date_of_birth.text = formattedDate
+        }?:run {
+            date_of_birth.text = ""
         }
     }
 
