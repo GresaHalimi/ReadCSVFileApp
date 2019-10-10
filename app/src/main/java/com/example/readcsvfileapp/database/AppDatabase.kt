@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.readcsvfileapp.engine.User
+import com.example.readcsvfileapp.repository.User
 
 
 @Database(entities = arrayOf(User::class), version = 1)
@@ -20,13 +20,15 @@ abstract class AppDatabase : RoomDatabase() {
 
         private var appDatabase: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase? {
-            if (appDatabase == null) {
-                appDatabase =
-                    Room.databaseBuilder(context, AppDatabase::class.java, databaseName)
-                        .build()
+        fun getInstance(context: Context): AppDatabase {
+            appDatabase?.let {
+                return it
+            } ?: run {
+                return Room.databaseBuilder(context, AppDatabase::class.java, databaseName)
+                    .build().apply {
+                        appDatabase = this
+                    }
             }
-            return appDatabase
         }
     }
 }

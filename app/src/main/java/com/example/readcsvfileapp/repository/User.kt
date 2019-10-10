@@ -1,4 +1,4 @@
-package com.example.readcsvfileapp.engine
+package com.example.readcsvfileapp.repository
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.readcsvfileapp.engine.User
+import com.example.readcsvfileapp.repository.User
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-open class DatabaseInitializerTest {
+open class AppDatabaseTest {
 
     private lateinit var usersDatabase: AppDatabase
 
@@ -23,33 +23,45 @@ open class DatabaseInitializerTest {
     }
 
     @Test
-    fun itShouldInsertOneUserToDB_When_DateOfBirthNull_On_AddUsers() {
+    fun itShouldInsertOneUserToDB_When_DateOfBirthNull_On_InsertAll() {
         val user = User(1, "User1", "User1Surname", 1, null)
         val users = arrayListOf(user)
-        DatabaseInitializer.addUsers(usersDatabase, arrayListOf(user))
+        usersDatabase.userDao().insertAll(arrayListOf(user))
 
-        assertEquals(users, DatabaseInitializer.getAllUsers(usersDatabase))
+        assertEquals(users, usersDatabase.userDao().allUsers())
     }
 
     @Test
-    fun itShouldInsertOneUserToDB_When_DateOfBirthNotNull_On_AddUsers() {
+    fun itShouldInsertOneUserToDB_When_DateOfBirthNotNull_On_InsertAll() {
         val user = User(1, "User1", "User1Surname", 1, Date())
         val users = arrayListOf(user)
-        DatabaseInitializer.addUsers(usersDatabase, arrayListOf(user))
+        usersDatabase.userDao().insertAll(arrayListOf(user))
 
-        assertEquals(users, DatabaseInitializer.getAllUsers(usersDatabase))
+        assertEquals(users, usersDatabase.userDao().allUsers())
     }
 
     @Test
-    fun itShouldInsertMoreUsersToDB_On_AddUsers(){
+    fun itShouldInsertMoreUsersToDB_On_InsertAll(){
         val user1 = User(1, "User1", "User1Surname", 1, null)
         val user2 = User(2, "User2", "User2Surname", 3, Date())
         val users = arrayListOf<User>()
         users.add(user1)
         users.add(user2)
 
-        DatabaseInitializer.addUsers(usersDatabase, users)
+        usersDatabase.userDao().insertAll(users)
 
-        assertEquals(users, DatabaseInitializer.getAllUsers(usersDatabase))
+        assertEquals(users, usersDatabase.userDao().allUsers())
+    }
+
+    @Test
+    fun itShouldRemoveAllUsersFromDB_On_AddUsers(){
+        val user1 = User(1, "User1", "User1Surname", 1, null)
+        val users = arrayListOf<User>()
+        users.add(user1)
+
+        usersDatabase.userDao().insertAll(users)
+        usersDatabase.userDao().delete()
+
+        assertEquals(0, usersDatabase.userDao().allUsers()?.size)
     }
 }

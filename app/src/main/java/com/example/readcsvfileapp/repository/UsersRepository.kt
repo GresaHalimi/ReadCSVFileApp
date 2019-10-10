@@ -1,4 +1,4 @@
-package com.example.readcsvfileapp.engine
+package com.example.readcsvfileapp.repository
 
 
 interface UsersRepository{
@@ -15,6 +15,8 @@ interface UsersRepository{
     fun fetchUsers()
 
     fun onCancelWorkerScope()
+
+    fun getCachedData()
     //endregion
 
 
@@ -30,7 +32,6 @@ interface UsersRepository{
 
     interface FetchCachedUsersCallback : UsersEngineCallback {
         fun onFetchCachedUsersSuccess(users: List<User>)
-        fun onFetchCachedUsersFailure(error: Throwable?)
     }
 
     //endregion

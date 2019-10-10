@@ -2,8 +2,9 @@ package com.example.readcsvfileapp
 
 
 import android.view.ViewGroup
-import com.example.readcsvfileapp.engine.User
-import com.example.readcsvfileapp.engine.UsersRepositoryImpl
+import com.example.readcsvfileapp.repository.User
+import com.example.readcsvfileapp.repository.UsersRepository
+import com.example.readcsvfileapp.repository.UsersRepositoryImpl
 import com.example.readcsvfileapp.main.UsersPresenter
 import com.example.readcsvfileapp.main.UserItemView
 import com.example.readcsvfileapp.main.UsersView
@@ -21,7 +22,7 @@ class UsersPresenterImplTest {
     @Mock
     private lateinit var mockView: UsersView
     @Mock
-    private lateinit var mockUsersEngineImpl: UsersRepositoryImpl
+    private lateinit var mockUsersEngineImpl: UsersRepository
     @Mock
     private lateinit var mockUserItemView: UserItemView
     @Mock
@@ -216,12 +217,5 @@ class UsersPresenterImplTest {
 
         verify(mockView, times(1)).dismissSwipeRefresh()
         verify(mockView, times(1)).reloadContentView()
-    }
-
-    @Test
-    fun itShouldRequestData_On_OnFetchCachedUsersFailure(){
-        subject.onFetchCachedUsersFailure(Throwable("Error"))
-
-        verify(mockUsersEngineImpl, times(1)).fetchUsers()
     }
 }

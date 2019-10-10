@@ -4,12 +4,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.readcsvfile.ui.adapter.StackViewDataSource
 import com.example.readcsvfile.ui.adapter.StackViewDelegate
-import com.example.readcsvfileapp.engine.User
-import com.example.readcsvfileapp.engine.UsersRepository
-import com.example.readcsvfileapp.engine.UsersRepositoryImpl
+import com.example.readcsvfileapp.repository.User
+import com.example.readcsvfileapp.repository.UsersRepository
 
 
-open class UsersPresenter(val usersEngine: UsersRepositoryImpl) : Presenter<UsersView>,
+open class UsersPresenter(val usersRepository: UsersRepository) : Presenter<UsersView>,
     StackViewDataSource, StackViewDelegate,
     UsersRepository.FetchUsersCallback, UsersRepository.FetchCachedUsersCallback {
 
@@ -18,14 +17,15 @@ open class UsersPresenter(val usersEngine: UsersRepositoryImpl) : Presenter<User
 
     override fun attachedView(view: UsersView) {
         mView = view
-        usersEngine.register(this)
+        usersRepository.register(this)
+        usersRepository.getCachedData()
         showLoading()
-        users = usersEngine.getUsers()
+        users = usersRepository.getUsers()
     }
 
     override fun detachView() {
-        usersEngine.onCancelWorkerScope()
-        usersEngine.unRegister(this)
+        usersRepository.onCancelWorkerScope()
+        usersRepository.unRegister(this)
         mView = null
     }
 
@@ -35,7 +35,7 @@ open class UsersPresenter(val usersEngine: UsersRepositoryImpl) : Presenter<User
     }
 
     fun requestData() {
-        usersEngine.fetchUsers()
+        usersRepository.fetchUsers()
     }
 
     fun showLoading() {
@@ -85,7 +85,7 @@ open class UsersPresenter(val usersEngine: UsersRepositoryImpl) : Presenter<User
 
     override fun onFetchUsersFailure(error: Throwable?) {
         dismissLoading()
-        usersEngine.let {
+        usersRepository.let {
             if (it.getUsers().isNotEmpty()) {
                 mView?.showSnackbar(error?.localizedMessage.toString())
             } else {
@@ -102,10 +102,6 @@ open class UsersPresenter(val usersEngine: UsersRepositoryImpl) : Presenter<User
             dismissLoading()
             mView?.reloadContentView()
         }
-    }
-
-    override fun onFetchCachedUsersFailure(error: Throwable?) {
-        requestData()
     }
 
 }
