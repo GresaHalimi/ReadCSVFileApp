@@ -13,6 +13,10 @@ import java.util.*
 
 open class UserItemView : RelativeLayout, ItemView {
 
+    companion object{
+        private const val DATE_FORMAT = "dd MMMM yyyy"
+    }
+
     constructor(context: Context) : super(context) {
         init()
     }
@@ -58,7 +62,7 @@ open class UserItemView : RelativeLayout, ItemView {
 
     override fun setBirthDate(date: Date?){
         date?.let {
-            val formattedDate = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(it)
+            val formattedDate = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(it)
             date_of_birth.text = formattedDate
         }?:run {
             date_of_birth.text = ""

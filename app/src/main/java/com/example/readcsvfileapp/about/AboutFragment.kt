@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.about_view.*
 class AboutFragment : BaseFragment() {
 
     companion object{
-        private const val filePath: String = "file:///android_asset/about.html"
+        private const val FILE_PATH = "file:///android_asset/about.html"
     }
 
     override val layout: Int
@@ -29,6 +29,6 @@ class AboutFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val vWebView = webview
-        vWebView.loadUrl(filePath)
+        vWebView.loadUrl(FILE_PATH)
     }
 }
