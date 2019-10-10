@@ -4,15 +4,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.readcsvfile.ui.adapter.StackViewDataSource
 import com.example.readcsvfile.ui.adapter.StackViewDelegate
-import com.example.readcsvfileapp.Presenter
 import com.example.readcsvfileapp.engine.User
-import com.example.readcsvfileapp.engine.UsersEngine
-import com.example.readcsvfileapp.engine.UsersEngineImpl
+import com.example.readcsvfileapp.engine.UsersRepository
+import com.example.readcsvfileapp.engine.UsersRepositoryImpl
 
 
-open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersView>,
+open class UsersPresenter(val usersEngine: UsersRepositoryImpl) : Presenter<UsersView>,
     StackViewDataSource, StackViewDelegate,
-    UsersEngine.FetchUsersCallback {
+    UsersRepository.FetchUsersCallback, UsersRepository.FetchCachedUsersCallback {
 
     private var mView: UsersView? = null
     var users: List<User> = arrayListOf()
@@ -20,16 +19,12 @@ open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersVie
     override fun attachedView(view: UsersView) {
         mView = view
         usersEngine.register(this)
+        showLoading()
         users = usersEngine.getUsers()
-        if (users.isEmpty()) {
-            showLoading()
-            requestData()
-        }
-        updateView()
     }
 
     override fun detachView() {
-        usersEngine.onCancelAsyncTask()
+        usersEngine.onCancelWorkerScope()
         usersEngine.unRegister(this)
         mView = null
     }
@@ -37,10 +32,6 @@ open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersVie
     override fun onRefresh() {
         showLoading()
         requestData()
-    }
-
-    private fun updateView() {
-        mView?.reloadContentView()
     }
 
     fun requestData() {
@@ -61,7 +52,6 @@ open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersVie
             mView?.dismissProgressBar()
         }
     }
-
 
     override fun getNumberOfItems(): Int {
         return users.size
@@ -102,6 +92,20 @@ open class UsersPresenter(val usersEngine: UsersEngineImpl) : Presenter<UsersVie
                 mView?.showErrorView(error?.localizedMessage.toString())
             }
         }
+    }
+
+    override fun onFetchCachedUsersSuccess(users: List<User>) {
+        this.users = users
+        if(users.isEmpty()){
+            requestData()
+        }else {
+            dismissLoading()
+            mView?.reloadContentView()
+        }
+    }
+
+    override fun onFetchCachedUsersFailure(error: Throwable?) {
+        requestData()
     }
 
 }

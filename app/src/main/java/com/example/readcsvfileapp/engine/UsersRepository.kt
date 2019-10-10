@@ -1,10 +1,10 @@
 package com.example.readcsvfileapp.engine
 
 
-interface UsersEngine{
+interface UsersRepository{
 
     //----------------------------------------------------------------------------------------------
-    //region UsersEngine
+    //region UsersRepository
 
     fun register(callback: UsersEngineCallback)
 
@@ -14,6 +14,7 @@ interface UsersEngine{
 
     fun fetchUsers()
 
+    fun onCancelWorkerScope()
     //endregion
 
 
@@ -25,6 +26,11 @@ interface UsersEngine{
     interface FetchUsersCallback : UsersEngineCallback {
         fun onFetchUsersSuccess(users: List<User>)
         fun onFetchUsersFailure(error: Throwable?)
+    }
+
+    interface FetchCachedUsersCallback : UsersEngineCallback {
+        fun onFetchCachedUsersSuccess(users: List<User>)
+        fun onFetchCachedUsersFailure(error: Throwable?)
     }
 
     //endregion

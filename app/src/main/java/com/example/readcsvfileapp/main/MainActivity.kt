@@ -15,7 +15,7 @@ import com.example.readcsvfile.ui.adapter.GenericRecyclerViewAdapter
 import com.example.readcsvfileapp.R
 import com.example.readcsvfileapp.about.AboutFragment
 import com.example.readcsvfileapp.about.BaseFragment
-import com.example.readcsvfileapp.engine.UsersEngineImpl
+import com.example.readcsvfileapp.engine.UsersRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
 
         supportFragmentManager.addOnBackStackChangedListener(this)
         mUsersPresenter =
-            UsersPresenter(UsersEngineImpl(applicationContext))
+            UsersPresenter(UsersRepositoryImpl(applicationContext))
         initializeAdapter()
         mUsersPresenter?.attachedView(this)
     }
@@ -142,9 +142,10 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
     }
 
     override fun showErrorView(message: String) {
-        vRecyclerView.visibility = View.GONE
         vProgressbar.visibility = View.GONE
+        vRecyclerView.visibility = View.VISIBLE
         vSwipeRefreshLayout.visibility = View.VISIBLE
+        vSwipeRefreshLayout.isEnabled = true
         vErrorTextView.visibility = View.VISIBLE
         vErrorTextView.text = message
     }

@@ -3,7 +3,7 @@ package com.example.readcsvfileapp
 
 import android.view.ViewGroup
 import com.example.readcsvfileapp.engine.User
-import com.example.readcsvfileapp.engine.UsersEngineImpl
+import com.example.readcsvfileapp.engine.UsersRepositoryImpl
 import com.example.readcsvfileapp.main.UsersPresenter
 import com.example.readcsvfileapp.main.UserItemView
 import com.example.readcsvfileapp.main.UsersView
@@ -21,7 +21,7 @@ class UsersPresenterImplTest {
     @Mock
     private lateinit var mockView: UsersView
     @Mock
-    private lateinit var mockUsersEngineImpl: UsersEngineImpl
+    private lateinit var mockUsersEngineImpl: UsersRepositoryImpl
     @Mock
     private lateinit var mockUserItemView: UserItemView
     @Mock
@@ -37,18 +37,11 @@ class UsersPresenterImplTest {
     }
 
     @Test
-    fun itShouldFetchData_When_NoCashedData_On_AttachedView() {
-
-        verify(mockView, times(1)).showProgressBar()
-        verify(mockUsersEngineImpl, times(1)).fetchUsers()
-    }
-
-    @Test
     fun itShouldShowProgressBarAndFetchUsers_When_NoUsers_On_OnRefresh() {
         subject.onRefresh()
 
         verify(mockView, times(2)).showProgressBar()
-        verify(mockUsersEngineImpl, times(2)).fetchUsers()
+        verify(mockUsersEngineImpl, times(1)).fetchUsers()
     }
 
     @Test
@@ -58,13 +51,13 @@ class UsersPresenterImplTest {
         subject.onRefresh()
 
         verify(mockView, times(1)).showSwipeRefresh()
-        verify(mockUsersEngineImpl, times(2)).fetchUsers()
+        verify(mockUsersEngineImpl, times(1)).fetchUsers()
     }
 
     @Test
     fun itShouldNotFetchData_When_HasCashedData_On_AttachedView() {
         val mockUserView = mock(UsersView::class.java)
-        val mockEngine = mock(UsersEngineImpl::class.java)
+        val mockEngine = mock(UsersRepositoryImpl::class.java)
         val userList = arrayListOf(User(1, "Gresa", "Halimi", 0, null))
         `when`(mockEngine.getUsers()).thenReturn(userList)
 
@@ -79,6 +72,7 @@ class UsersPresenterImplTest {
     fun itShouldUnregisterEngine_On_onDetachView() {
         subject.detachView()
 
+        verify(mockUsersEngineImpl, times(1)).onCancelWorkerScope()
         verify(mockUsersEngineImpl, times(1)).unRegister(subject)
     }
 
@@ -86,7 +80,7 @@ class UsersPresenterImplTest {
     fun itShouldFetchUsers_On_RequestData() {
         subject.requestData()
 
-        verify(mockUsersEngineImpl, times(2)).fetchUsers()
+        verify(mockUsersEngineImpl, times(1)).fetchUsers()
     }
 
     @Test
@@ -128,7 +122,7 @@ class UsersPresenterImplTest {
     fun itShouldReloadContentView_On_OnFetchUsersSuccess() {
         subject.onFetchUsersSuccess(arrayListOf())
 
-        verify(mockView, times(2)).reloadContentView()
+        verify(mockView, times(1)).reloadContentView()
     }
 
     @Test
@@ -207,4 +201,27 @@ class UsersPresenterImplTest {
         verify(mockView, times(1)).showErrorView(throwable.localizedMessage.toString())
     }
 
+    @Test
+    fun itShouldRequestData_When_NoCashedUsers_On_OnFetchCachedUsersSuccess() {
+        subject.onFetchCachedUsersSuccess(arrayListOf())
+
+        verify(mockUsersEngineImpl, times(1)).fetchUsers()
+    }
+
+    @Test
+    fun itShouldDismissSwipeRefreshAndReloadContentView_When_HasCashedUsers_On_OnFetchCachedUsersSuccess() {
+        val userList = arrayListOf(User(1, "Gresa", "Halimi", 0, null))
+
+        subject.onFetchCachedUsersSuccess(userList)
+
+        verify(mockView, times(1)).dismissSwipeRefresh()
+        verify(mockView, times(1)).reloadContentView()
+    }
+
+    @Test
+    fun itShouldRequestData_On_OnFetchCachedUsersFailure(){
+        subject.onFetchCachedUsersFailure(Throwable("Error"))
+
+        verify(mockUsersEngineImpl, times(1)).fetchUsers()
+    }
 }

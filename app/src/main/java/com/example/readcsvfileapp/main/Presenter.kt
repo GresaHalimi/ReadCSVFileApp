@@ -1,4 +1,4 @@
-package com.example.readcsvfileapp
+package com.example.readcsvfileapp.main
 
 interface Presenter<V> {
 
