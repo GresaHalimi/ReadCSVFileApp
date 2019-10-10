@@ -186,7 +186,7 @@ class UsersPresenterImplTest {
 
 
         verify(mockView, times(1)).dismissSwipeRefresh()
-        verify(mockView, times(1)).showSnackbar(throwable.localizedMessage.toString())
+        verify(mockView, times(1)).showSnackbar(throwable.message.toString())
     }
 
     @Test
@@ -199,7 +199,7 @@ class UsersPresenterImplTest {
 
         verify(mockView, times(1)).dismissSwipeRefresh()
         verify(mockView, times(1)).dismissProgressBar()
-        verify(mockView, times(1)).showErrorView(throwable.localizedMessage.toString())
+        verify(mockView, times(1)).showErrorView(throwable.message.toString())
     }
 
     @Test
