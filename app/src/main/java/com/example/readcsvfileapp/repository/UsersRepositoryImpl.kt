@@ -5,19 +5,18 @@ import kotlinx.coroutines.*
 import java.util.*
 
 
-open class UsersRepositoryImpl(
+class UsersRepositoryImpl(
     private val database: AppDatabase,
     private val coroutineContextProvider: CoroutineContextProvider,
     private val localDataSource: LocalDataSource
 ) : UsersRepository {
 
-    val observers = arrayListOf<UsersRepository.UsersEngineCallback>()
+    private val observers = arrayListOf<UsersRepository.UsersEngineCallback>()
     private val mUsers = arrayListOf<User>()
 
-    private val job = Job()
-    val handler = CoroutineExceptionHandler { _, exception -> }
-    val workerScope = CoroutineScope(coroutineContextProvider.main() + job + handler)
-
+    private val job = SupervisorJob()
+    private val handler = CoroutineExceptionHandler { _, exception -> }
+    private var workerScope = CoroutineScope(coroutineContextProvider.main() + job + handler)
 
     override fun getCachedData() {
         workerScope.launch(coroutineContextProvider.main()) {
@@ -29,13 +28,10 @@ open class UsersRepositoryImpl(
         val deferredUsers = workerScope.async(coroutineContextProvider.io()) {
             return@async database.userDao().allUsers()
         }
-        try {
-            val users = deferredUsers.await()
-            mUsers.clear()
-            users?.let { mUsers.addAll(it) }
-            notifyFetchCashedUsersSuccess(mUsers)
-        } catch (ex: Exception) {
-        }
+        val users = deferredUsers.await()
+        mUsers.clear()
+        users?.let { mUsers.addAll(it) }
+        notifyFetchCashedUsersSuccess(mUsers)
     }
 
     private fun updateCashedUserList() {

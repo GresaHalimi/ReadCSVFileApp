@@ -30,10 +30,7 @@ class LocalDataSourceImpl(private val applicationContext: Context) : LocalDataSo
                 .build()
             val users = arrayListOf<User>()
 
-            var nextRecord = csvReader.readNext()
-            if (nextRecord == null) {
-                throw FileStructureException("File is empty!")
-            }
+            var nextRecord: Array<out String>? = csvReader.readNext() ?: throw FileStructureException("File is empty!")
             while (nextRecord != null) {
                 if (nextRecord.size == 4) {
                     val firstName = nextRecord[0]
@@ -53,7 +50,7 @@ class LocalDataSourceImpl(private val applicationContext: Context) : LocalDataSo
                     }
                     val dateOfBirth = date
 
-                    if (!(firstName.isNullOrEmpty() && surname.isNullOrEmpty() && issueCount == 0 && birthDate.isNullOrEmpty())) {
+                    if (!(firstName.isEmpty() && surname.isEmpty() && issueCount == 0 && birthDate.isEmpty())) {
                         val user = User(
                             firstname = firstName,
                             surname = surname,

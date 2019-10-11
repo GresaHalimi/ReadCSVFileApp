@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 
 abstract class BaseFragment: Fragment(){
     // the root view
-    protected lateinit var rootView: View
+    private lateinit var rootView: View
 
     protected abstract val layout: Int
 

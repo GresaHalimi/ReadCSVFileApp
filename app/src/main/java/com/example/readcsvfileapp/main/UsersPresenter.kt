@@ -2,13 +2,13 @@ package com.example.readcsvfileapp.main
 
 import android.view.View
 import android.view.ViewGroup
-import com.example.readcsvfile.ui.adapter.StackViewDataSource
-import com.example.readcsvfile.ui.adapter.StackViewDelegate
 import com.example.readcsvfileapp.repository.User
 import com.example.readcsvfileapp.repository.UsersRepository
+import com.example.readcsvfileapp.ui.StackViewDataSource
+import com.example.readcsvfileapp.ui.StackViewDelegate
 
 
-open class UsersPresenter(val usersRepository: UsersRepository) : Presenter<UsersView>,
+open class UsersPresenter(private val usersRepository: UsersRepository) : Presenter<UsersView>,
     StackViewDataSource, StackViewDelegate,
     UsersRepository.FetchUsersCallback, UsersRepository.FetchCachedUsersCallback {
 
@@ -39,7 +39,7 @@ open class UsersPresenter(val usersRepository: UsersRepository) : Presenter<User
     }
 
     fun showLoading() {
-        if (users.size > 0) {
+        if (users.isNotEmpty()) {
             mView?.showSwipeRefresh()
         } else {
             mView?.showProgressBar()
@@ -48,7 +48,7 @@ open class UsersPresenter(val usersRepository: UsersRepository) : Presenter<User
 
     fun dismissLoading() {
         mView?.dismissSwipeRefresh()
-        if (users.size <= 0) {
+        if (users.isEmpty()) {
             mView?.dismissProgressBar()
         }
     }

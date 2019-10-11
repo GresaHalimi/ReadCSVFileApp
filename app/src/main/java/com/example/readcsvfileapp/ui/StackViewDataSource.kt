@@ -1,4 +1,4 @@
-package com.example.readcsvfile.ui.adapter
+package com.example.readcsvfileapp.ui
 
 interface StackViewDataSource {
 

@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.readcsvfile.ui.adapter.GenericRecyclerViewAdapter
 import com.example.readcsvfileapp.R
 import com.example.readcsvfileapp.about.AboutFragment
 import com.example.readcsvfileapp.about.BaseFragment
@@ -19,13 +18,14 @@ import com.example.readcsvfileapp.database.AppDatabase
 import com.example.readcsvfileapp.repository.AppCoroutineContextProvider
 import com.example.readcsvfileapp.repository.LocalDataSourceImpl
 import com.example.readcsvfileapp.repository.UsersRepositoryImpl
+import com.example.readcsvfileapp.ui.adapter.GenericRecyclerViewAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStackChangedListener {
 
     companion object {
-        private val FRAGMENT_TAG = "FRAGMENT_TAG"
+        private const val FRAGMENT_TAG = "FRAGMENT_TAG"
     }
 
     private lateinit var vRecyclerView: RecyclerView
@@ -59,11 +59,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
         vProgressbar = progressbar
         vErrorTextView = error_text
         vSwipeRefreshLayout = swiperefreshlayout
-        vSwipeRefreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
-            override fun onRefresh() {
-                mUsersPresenter?.onRefresh()
-            }
-        })
+        vSwipeRefreshLayout.setOnRefreshListener { mUsersPresenter?.onRefresh() }
     }
 
     private fun initializeAdapter() {
@@ -71,7 +67,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
         vRecyclerView.layoutManager = mLayoutManager
         mAdapter = GenericRecyclerViewAdapter()
         mUsersPresenter?.let { mAdapter?.setDataSource(it) }
-        vRecyclerView.setAdapter(mAdapter)
+        vRecyclerView.adapter = mAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -81,7 +77,7 @@ class MainActivity : AppCompatActivity(), UsersView, FragmentManager.OnBackStack
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun openFragment(fragment: BaseFragment) {
+    private fun openFragment(fragment: BaseFragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)

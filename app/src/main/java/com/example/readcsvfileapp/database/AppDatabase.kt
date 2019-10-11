@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.example.readcsvfileapp.repository.User
 
 
-@Database(entities = arrayOf(User::class), version = 1)
+@Database(entities = [User::class], version = 1)
 @TypeConverters(ConverterHelper::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -16,7 +16,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-        private val databaseName = "usersDatabase_DB"
+        private const val databaseName = "usersDatabase_DB"
 
         private var appDatabase: AppDatabase? = null
 

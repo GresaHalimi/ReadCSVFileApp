@@ -1,9 +1,12 @@
-package com.example.readcsvfile.ui.adapter
+package com.example.readcsvfileapp.ui.adapter
 
 import android.util.SparseIntArray
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.readcsvfileapp.ui.StackViewDataSource
+import com.example.readcsvfileapp.ui.StackViewDelegate
+
 
 class GenericRecyclerViewAdapter :
     RecyclerView.Adapter<GenericRecyclerViewAdapter.ItemViewHolder>() {
@@ -19,12 +22,10 @@ class GenericRecyclerViewAdapter :
         totalItemsCount = 0
         items.clear()
         this.dataSource?.let {
-            var itemPosition = 0
             val itemsCount = it.getNumberOfItems()
             totalItemsCount += itemsCount
-            for (item in 0 until itemsCount) {
+            for ((itemPosition, item) in (0 until itemsCount).withIndex()) {
                 items.put(itemPosition, item)
-                itemPosition++
             }
         }
     }
@@ -41,7 +42,7 @@ class GenericRecyclerViewAdapter :
         setupAccordingToDataSource()
     }
 
-    fun updateDelegateAndNotifyDataSetChanged(stackViewDelegate: StackViewDelegate) {
+    private fun updateDelegateAndNotifyDataSetChanged(stackViewDelegate: StackViewDelegate) {
         this.delegate = stackViewDelegate
         this.dataSource = stackViewDelegate.getDataSource()
         setupAccordingToDataSource()

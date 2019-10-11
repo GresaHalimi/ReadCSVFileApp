@@ -1,4 +1,4 @@
-package com.example.readcsvfile.ui.adapter
+package com.example.readcsvfileapp.ui
 
 import android.view.View
 import android.view.ViewGroup

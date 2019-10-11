@@ -154,10 +154,10 @@ class UsersPresenterImplTest {
 
         subject.onItemViewCreated(mockUserItemView, item)
 
-        verify(mockUserItemView, times(1)).setName(userList.get(item).firstname)
-        verify(mockUserItemView, times(1)).setSurname(userList.get(item).surname)
-        verify(mockUserItemView, times(1)).setIssueCount(userList.get(item).issueCount)
-        verify(mockUserItemView, times(1)).setBirthDate(userList.get(item).dateOfBirth)
+        verify(mockUserItemView, times(1)).setName(userList[item].firstname)
+        verify(mockUserItemView, times(1)).setSurname(userList[item].surname)
+        verify(mockUserItemView, times(1)).setIssueCount(userList[item].issueCount)
+        verify(mockUserItemView, times(1)).setBirthDate(userList[item].dateOfBirth)
     }
 
     @Test
@@ -168,10 +168,10 @@ class UsersPresenterImplTest {
 
         subject.onItemViewCreated(mockUserItemView, item)
 
-        verify(mockUserItemView, times(1)).setName(userList.get(item).firstname)
-        verify(mockUserItemView, times(1)).setSurname(userList.get(item).surname)
-        verify(mockUserItemView, times(1)).setIssueCount(userList.get(item).issueCount)
-        verify(mockUserItemView, times(1)).setBirthDate(userList.get(item).dateOfBirth)
+        verify(mockUserItemView, times(1)).setName(userList[item].firstname)
+        verify(mockUserItemView, times(1)).setSurname(userList[item].surname)
+        verify(mockUserItemView, times(1)).setIssueCount(userList[item].issueCount)
+        verify(mockUserItemView, times(1)).setBirthDate(userList[item].dateOfBirth)
     }
 
 
