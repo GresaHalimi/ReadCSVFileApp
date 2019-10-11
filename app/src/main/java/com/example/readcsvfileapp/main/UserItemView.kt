@@ -48,12 +48,12 @@ open class UserItemView : RelativeLayout, ItemView {
     }
 
 
-    override fun setName(n: String?) {
-        name.text = n
+    override fun setName(name: String?) {
+        name_txt.text = name
     }
 
-    override fun setSurname(sname: String?) {
-        surname.text = sname
+    override fun setSurname(surname: String?) {
+        surname_txt.text = surname
     }
 
     override fun setIssueCount(issue: Int?) {
