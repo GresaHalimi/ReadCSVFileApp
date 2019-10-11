@@ -20,7 +20,6 @@ open class UsersPresenter(private val usersRepository: UsersRepository) : Presen
         usersRepository.register(this)
         usersRepository.getCachedData()
         showLoading()
-        users = usersRepository.getUsers()
     }
 
     override fun detachView() {
