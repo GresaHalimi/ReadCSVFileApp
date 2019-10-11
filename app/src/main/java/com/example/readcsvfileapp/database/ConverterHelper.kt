@@ -9,7 +9,7 @@ class ConverterHelper {
 
     @TypeConverter
     fun toDate(dateLong: Long?): Date? {
-        return if (dateLong == null) null else Date(dateLong)
+        return dateLong?.let { Date(it) }
     }
 
     @TypeConverter

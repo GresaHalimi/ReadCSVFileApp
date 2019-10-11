@@ -30,7 +30,8 @@ class LocalDataSourceImpl(private val applicationContext: Context) : LocalDataSo
                 .build()
             val users = arrayListOf<User>()
 
-            var nextRecord: Array<out String>? = csvReader.readNext() ?: throw FileStructureException("File is empty!")
+            var nextRecord: Array<out String>? =
+                csvReader.readNext() ?: throw FileStructureException("File is empty!")
             while (nextRecord != null) {
                 if (nextRecord.size == 4) {
                     val firstName = nextRecord[0]
@@ -42,11 +43,12 @@ class LocalDataSourceImpl(private val applicationContext: Context) : LocalDataSo
                     val birthDate = nextRecord[3]
 
                     var date: Date? = null
-                    try {
-                        date =
-                            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(birthDate)
-                    } catch (e: ParseException) {
-                        throw FileStructureException("Wrong format")
+                    if (birthDate.isNotEmpty()) {
+                        try {
+                            date = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(birthDate)
+                        } catch (e: ParseException) {
+                            throw FileStructureException("Date Wrong format")
+                        }
                     }
                     val dateOfBirth = date
 
