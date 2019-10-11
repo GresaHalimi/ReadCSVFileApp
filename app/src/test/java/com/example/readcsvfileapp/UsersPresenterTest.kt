@@ -58,7 +58,7 @@ class UsersPresenterImplTest {
     @Test
     fun itShouldNotFetchData_When_HasCashedData_On_AttachedView() {
         val mockUserView = mock(UsersView::class.java)
-        val mockEngine = mock(UsersRepositoryImpl::class.java)
+        val mockEngine = mock(UsersRepository::class.java)
         val userList = arrayListOf(User(1, "Gresa", "Halimi", 0, null))
         `when`(mockEngine.getUsers()).thenReturn(userList)
 
