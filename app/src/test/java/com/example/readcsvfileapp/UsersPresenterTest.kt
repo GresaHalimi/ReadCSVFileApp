@@ -4,7 +4,6 @@ package com.example.readcsvfileapp
 import android.view.ViewGroup
 import com.example.readcsvfileapp.repository.User
 import com.example.readcsvfileapp.repository.UsersRepository
-import com.example.readcsvfileapp.repository.UsersRepositoryImpl
 import com.example.readcsvfileapp.main.UsersPresenter
 import com.example.readcsvfileapp.main.UserItemView
 import com.example.readcsvfileapp.main.UsersView
