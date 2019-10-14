@@ -38,14 +38,18 @@ class LocalDataSourceImpl(private val applicationContext: Context) : LocalDataSo
                     val surname = nextRecord[1]
                     var issueCount = 0
                     nextRecord[2].let {
-                        issueCount = it.toInt()
+                        try {
+                            issueCount = it.toInt()
+                        } catch (e: NumberFormatException) {
+                        }
                     }
                     val birthDate = nextRecord[3]
 
                     var date: Date? = null
                     if (birthDate.isNotEmpty()) {
                         try {
-                            date = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(birthDate)
+                            date =
+                                SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).parse(birthDate)
                         } catch (e: ParseException) {
                             throw FileStructureException("Date Wrong format")
                         }
