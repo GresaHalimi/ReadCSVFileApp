@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.readcsvfileapp.repository.User
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,7 +54,7 @@ open class AppDatabaseTest {
     }
 
     @Test
-    fun itShouldRemoveAllUsersFromDB_On_AddUsers(){
+    fun itShouldRemoveAllUsersFromDB_On_Delete(){
         val user1 = User(1, "User1", "User1Surname", 1, null)
         val users = arrayListOf<User>()
         users.add(user1)
