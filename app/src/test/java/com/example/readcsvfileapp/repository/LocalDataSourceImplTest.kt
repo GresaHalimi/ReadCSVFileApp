@@ -26,11 +26,10 @@ class LocalDataSourceImplTest{
 
     @Test
     fun itShouldReadDataFromCSVFile_When_FileIsCorrect_On_readData(){
-        val resourceInputFile = "/issues_test.csv"
-        val url = javaClass.getResource(resourceInputFile)
-        val stream = url?.openStream()
+        val url = javaClass.getResource("/issues_test.csv")
+        val inputStream = url?.openStream()
         `when`(mockContext.resources).thenReturn(mockResources)
-        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(stream)
+        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(inputStream)
 
         dataSource = LocalDataSourceImpl(mockContext)
         val users = dataSource.readData()
@@ -40,11 +39,10 @@ class LocalDataSourceImplTest{
 
     @Test
     fun itShouldReadDataFromCSVFile_When_IssueNumberIsString_On_readData(){
-        val resourceInputFile = "/issues_test_icorrect_issue.csv"
-        val url = javaClass.getResource(resourceInputFile)
-        val stream = url?.openStream()
+        val url = javaClass.getResource("/issues_test_icorrect_issue.csv")
+        val inputStream = url?.openStream()
         `when`(mockContext.resources).thenReturn(mockResources)
-        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(stream)
+        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(inputStream)
 
         dataSource = LocalDataSourceImpl(mockContext)
         val users = dataSource.readData()
@@ -54,23 +52,21 @@ class LocalDataSourceImplTest{
 
     @Test(expected = LocalDataSourceImpl.FileStructureException::class)
     fun itShouldThrowFileStructureException_When_DateHasWrongFormat_On_readData(){
-        val resourceInputFile = "/issues_test_date_format_incorrect.csv"
-        val url = javaClass.getResource(resourceInputFile)
-        val stream = url?.openStream()
+        val url = javaClass.getResource("/issues_test_date_format_incorrect.csv")
+        val inputStream = url?.openStream()
         `when`(mockContext.resources).thenReturn(mockResources)
-        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(stream)
+        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(inputStream)
 
         dataSource = LocalDataSourceImpl(mockContext)
         dataSource.readData()
     }
 
     @Test(expected = LocalDataSourceImpl.FileStructureException::class)
-    fun itShouldThrowFileStructureException_When_ColumnNumberIsIncorrect_On_readData(){
-        val resourceInputFile = "/issues_test_incorrect_data.csv"
-        val url = javaClass.getResource(resourceInputFile)
-        val stream = url?.openStream()
+    fun itShouldThrowFileStructureException_When_NumberOfColumnsIsDifferentFrom4_On_readData(){
+        val url = javaClass.getResource("/issues_test_incorrect_data.csv")
+        val inputStream = url?.openStream()
         `when`(mockContext.resources).thenReturn(mockResources)
-        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(stream)
+        `when`(mockContext.resources.openRawResource(R.raw.issues)).thenReturn(inputStream)
 
         dataSource = LocalDataSourceImpl(mockContext)
         dataSource.readData()
